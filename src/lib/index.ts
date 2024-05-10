@@ -1,1 +1,1 @@
-export {MyCustomPlugin} from './my-custom-plugin';
+export {CarbonIntensityPlugin} from './carbon-intensity';
