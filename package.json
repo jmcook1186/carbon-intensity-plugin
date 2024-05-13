@@ -1,7 +1,7 @@
 {
   "name": "carbon-intensity-plugin",
   "description": "Carbon intensity plugin for the GSF Impact Framework.",
-  "version": "v0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "Joseph Cook",
     "email": "is_jmc@protonmail.com"
