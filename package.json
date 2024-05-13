@@ -1,13 +1,13 @@
 {
   "name": "carbon-intensity-plugin",
-  "description": "Impact Framework plugins template.",
-  "version": "v0.1.0",
+  "description": "Carbon intensity plugin for the GSF Impact Framework.",
+  "version": "v0.0.1",
   "author": {
-    "name": "Green Software Foundation",
-    "email": "info@gsf.com"
+    "name": "Joseph Cook",
+    "email": "is_jmc@protonmail.com"
   },
   "bugs": {
-    "url": "https://github.com/Green-Software-Foundation/if-plugin-template/issues/new?assignees=&labels=feedback&projects=&template=feedback.md&title=Feedback+-+"
+    "url": "https://github.com/jmcook1186/carbon-intensity-plugin"
   },
   "dependencies": {
     "axios": "^1.6.8",
@@ -30,12 +30,12 @@
     "node": ">=18",
     "npm": ">=8"
   },
-  "homepage": "https://greensoftware.foundation",
+  "homepage": "https://github.com/jmcook1186/carbon-intensity-plugin",
   "keywords": [],
   "license": "MIT",
   "main": "build/index.js",
   "repository": {
-    "url": "https://github.com/Green-Software-Foundation/if-plugin-template.git"
+    "url": "https://github.com/jmcook1186/carbon-intensity-plugin"
   },
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.build.json",
