@@ -1,91 +1,177 @@
-# if-plugin-template
+# Carbon-intensity plugin
 
-`if-plugin-template` is an environmental impact calculator template which exposes an API for [IF](https://github.com/Green-Software-Foundation/if) to retrieve energy and embodied carbon estimates.
+The Carbon Intensity plugin grabs grid intensity data from the UK National Grid carbon intensity API for a given date.
+
 
 ## Implementation
 
-Here can be implementation details of the plugin. For example which API is used, transformations and etc.
+The carbon intensity plugin grabs grid carbon intensity data from the UK NationalGrid carbon intensity API (served at https://api.carbonintensity.org.uk) for each observation in a manifest's `input` data. 
+
+The `timestamp` field in the input data is used as a query parameter to the `intensity` endpoint documented [here](https://carbon-intensity.github.io/api-definitions/#get-intensity-factors).
+
+Currently, an API request is made for every timestep in the input array. However, since the API has a maximum temporal resolution of 30 minutes, a future upgrade will add some logic to only make a new API request if 30 minutes have elapsed since the previous request.
+
+
+
+
+
 
 ## Usage
 
-To run the `<YOUR-CUSTOM-PLUGIN>`, an instance of `PluginInterface` must be created. Then, the plugin's `execute()` method can be called, passing required arguments to it.
+To run the `carbon-intensity-plugin`, an instance of `CarbonIntensityAPI()` must be created. Then, the plugin's `execute()` method can be called, passing required arguments to it.
 
 This is how you could run the model in Typescript:
 
 ```typescript
-async function runPlugin() {
-  const newModel = await new MyCustomPlugin().configure(params);
-  const usage = await newModel.calculate([
-    {
-      timestamp: '2021-01-01T00:00:00Z',
-      duration: '15s',
-      'cpu-util': 34,
-    },
-    {
-      timestamp: '2021-01-01T00:00:15Z',
-      duration: '15s',
-      'cpu-util': 12,
-    },
-  ]);
+import { CarbonIntensityPlugin } from './src/lib/carbon-intensity';
 
-  console.log(usage);
+async function runPlugin() {
+
+    const inputs = [
+        {
+            timestamp: '2023-08-06T00:00',
+            duration: '15s',
+            'cpu-util': 34,
+        },
+        {
+            timestamp: '2023-08-06T00:00',
+            duration: '15s',
+            'cpu-util': 12,
+        },
+    ];
+
+    const out = await CarbonIntensityPlugin({}).execute(inputs)
+
+    console.log(out);
 }
 
 runPlugin();
+
 ```
 
-## Testing model integration
+## Integration into Impact Framework
 
-### Using local links
+### Using `npm link`
 
-For using locally developed model in `IF Framework` please follow these steps: 
+Clone this repository to your local machine. In the project root run `npm run build && npm link`.
+This creates a package with global scope on your local machine that can be installed by your instance of Impact Framework. 
 
-1. On the root level of a locally developed model run `npm link`, which will create global package. It uses `package.json` file's `name` field as a package name. Additionally name can be checked by running `npm ls -g --depth=0 --link=true`.
-2. Use the linked model in impl by specifying `name`, `method`, `path` in initialize models section. 
+Navigate to the Impact Framework root, and run `npm link carbon-intensity-plugin`.
+
+Now you can use the plugin by including it in your manifest file.
+
 
 ```yaml
-name: plugin-demo-link
-description: loads plugin
+name: carbon-intensity plugin demo
+description: 
+tags:
+initialize:
+  plugins:
+    carbon-intensity:
+      method: CarbonIntensityPlugin
+      path: "carbon-intensity-plugin"
+tree:
+  children:
+    child:
+      pipeline:
+        - carbon-intensity
+      config:
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          carbon: 30
+        - timestamp: 2023-09-06T00:00
+          duration: 3600
+          carbon: 30
+        - timestamp: 2023-10-06T00:00
+          duration: 3600
+          carbon: 30
+
+```
+
+
+## Outputs
+
+The example manifest above yields the following output data:
+
+```yaml
+name: coefficient-demo
+description: successful path
 tags: null
 initialize:
   plugins:
-    my-custom-plugin:
-      method: MyCustomPlugin
-      path: "<name-field-from-package.json>"
-      global-config:
-        ...
-...
+    carbon-intensity:
+      path: carbon-intensity-plugin
+      method: CarbonIntensityPlugin
+tree:
+  children:
+    child:
+      pipeline:
+        - carbon-intensity
+      config: null
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          carbon: 30
+        - timestamp: 2023-09-06T00:00
+          duration: 3600
+          carbon: 30
+        - timestamp: 2023-10-06T00:00
+          duration: 3600
+          carbon: 30
+      outputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          carbon: 30
+          grid/carbon-intensity: 96
+        - timestamp: 2023-09-06T00:00
+          duration: 3600
+          carbon: 30
+          grid/carbon-intensity: 206
+        - timestamp: 2023-10-06T00:00
+          duration: 3600
+          carbon: 30
+          grid/carbon-intensity: 60
+
 ```
+
 
 ### Using directly from Github
 
-You can simply push your model to the public Github repository and pass the path to it in your impl.
-For example, for a model saved in `github.com/my-repo/my-model` you can do the following:
+You can load the plugin directly from this Github repository. Simply run `npm install -g https://github.com/jmcook1186/carbon-intensity-plugin`
 
-npm install your model: 
-
-```
-npm install -g https://github.com/my-repo/my-model
-```
-
-Then, in your `impl`, provide the path in the model instantiation. You also need to specify which class the model instantiates. In this case you are using the `PluginInterface`, so you can specify `OutputModel`. 
+Then, in your `manifest`, provide the path in the model instantiation. You also need to specify the function name for the exported plugin function.
 
 ```yaml
-name: plugin-demo-git
-description: loads plugin
-tags: null
+name: coefficient-demo
+description: successful path
+tags:
 initialize:
   plugins:
-    my-custom-plugin:
-      method: MyCustomPlugin
-      path: https://github.com/my-repo/my-model
-      global-config:
-        ...
-...
+    carbon-intensity:
+      method: CarbonIntensityPlugin
+      path: "https://github.com/jmcook1186/carbon-intensity-plugin"
+tree:
+  children:
+    child:
+      pipeline:
+        - carbon-intensity
+      config:
+      inputs:
+        - timestamp: 2023-08-06T00:00
+          duration: 3600
+          carbon: 30
+        - timestamp: 2023-09-06T00:00
+          duration: 3600
+          carbon: 30
+        - timestamp: 2023-10-06T00:00
+          duration: 3600
+          carbon: 30
+
 ```
 
 Now, when you run the `manifest` using the IF CLI, it will load the model automatically. Run using:
 
 ```sh
-ie --manifest <path-to-your-impl> --output <path-to-save-output>
+ie --m <path-to-your-manifest> --stdout
 ```
