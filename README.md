@@ -13,9 +13,6 @@ Currently, an API request is made for every timestep in the input array. However
 
 
 
-
-
-
 ## Usage
 
 To run the `carbon-intensity-plugin`, an instance of `CarbonIntensityAPI()` must be created. Then, the plugin's `execute()` method can be called, passing required arguments to it.
@@ -51,14 +48,22 @@ runPlugin();
 
 ## Integration into Impact Framework
 
-### Using `npm link`
+### Using npm
 
-Clone this repository to your local machine. In the project root run `npm run build && npm link`.
+`carbon-intensity-plugin` is published as an [npm package](https://www.npmjs.com/package/carbon-intensity-plugin).
+You can install it using:
+
+```
+npm i carbon-intensity-plugin
+```
+
+Alternatively, if you want to play with a local copy or use a non-released branch, clone this repository to your local machine. In the project root run `npm run build && npm link`.
+
 This creates a package with global scope on your local machine that can be installed by your instance of Impact Framework. 
 
 Navigate to the Impact Framework root, and run `npm link carbon-intensity-plugin`.
 
-Now you can use the plugin by including it in your manifest file.
+Now, regardless whether you are using `npm i` or `npm link` you can use the plugin by including it in your manifest file as follows:
 
 
 ```yaml
