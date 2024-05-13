@@ -1,12 +1,10 @@
-import { PluginInterface, PluginParams } from '../types/interface';
-import { CarbonIntensityAPI } from './api';
+import {PluginInterface, PluginParams} from '../types/interface';
+import {CarbonIntensityAPI} from './api';
 
-export const CarbonIntensityPlugin = (
-): PluginInterface => {
+export const CarbonIntensityPlugin = (): PluginInterface => {
   const metadata = {
     kind: 'execute',
   };
-
 
   /**
    * Execute's strategy description here.
@@ -16,7 +14,7 @@ export const CarbonIntensityPlugin = (
     for await (const input of inputs) {
       const date = input.timestamp;
       const intensity = await CarbonIntensityAPI().fetchOutputData(date);
-      result.push({ ...input, 'grid/carbon-intensity': intensity });
+      result.push({...input, 'grid/carbon-intensity': intensity});
     }
     return result;
   };

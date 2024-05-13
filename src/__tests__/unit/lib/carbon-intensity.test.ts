@@ -1,4 +1,4 @@
-import { CarbonIntensityPlugin } from '../../../lib/carbon-intensity';
+import {CarbonIntensityPlugin} from '../../../lib/carbon-intensity';
 
 describe('lib/carbon-intensity: ', () => {
   describe('CarbonIntensityPlugin(): ', () => {
