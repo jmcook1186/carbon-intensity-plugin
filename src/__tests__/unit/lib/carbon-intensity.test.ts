@@ -1,9 +1,9 @@
-import {CarbonIntensityPlugin} from '../../../lib/carbon-intensity';
+import { CarbonIntensityPlugin } from '../../../lib/carbon-intensity';
 
 describe('lib/carbon-intensity: ', () => {
   describe('CarbonIntensityPlugin(): ', () => {
     it('has metadata field.', () => {
-      const pluginInstance = CarbonIntensityPlugin({});
+      const pluginInstance = CarbonIntensityPlugin();
 
       expect(pluginInstance).toHaveProperty('metadata');
       expect(pluginInstance).toHaveProperty('execute');
