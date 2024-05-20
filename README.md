@@ -11,6 +11,19 @@ The `timestamp` field in the input data is used as a query parameter to the `int
 
 Currently, an API request is made for every timestep in the input array. However, since the API has a maximum temporal resolution of 30 minutes, a future upgrade will add some logic to only make a new API request if 30 minutes have elapsed since the previous request.
 
+## Environment
+
+The UK national grid carbon intensity API is permissionless and does not require any auth credentials. Therefore, this plugin can just run with your default environment and does not need any credential in environment variables.
+
+
+## Parameters and config
+
+The `carbon-intensity` plugin does not require any global or node-level config. It only uses the `timestamp` value from `input` data. This is a required field in IF, so no additional parameters or config is required. You can just add the `carbon-intensity` plugin to your pipeline.
+
+
+## Outputs
+
+The output from `carbon-intensity` is `grid/carbon-intensity` in gCO2eq/kWh.
 
 
 ## Usage
@@ -180,3 +193,12 @@ Now, when you run the `manifest` using the IF CLI, it will load the model automa
 ```sh
 ie --m <path-to-your-manifest> --stdout
 ```
+
+## Unit tests
+
+The unit test coverage for this plugin is not yet complete. The existing unit tests can be found in `src/__tests__/unit/lib/carbon-intensity.test.ts`.
+
+
+## Citations
+
+The plugin simply grabs data for a given timestamp from the carbonintensity.org API. The methods used to generate the data served by the API are documented [here](https://carbonintensity.org.uk/).
