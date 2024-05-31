@@ -198,6 +198,12 @@ ie --m <path-to-your-manifest> --stdout
 
 The unit test coverage for this plugin is not yet complete. The existing unit tests can be found in `src/__tests__/unit/lib/carbon-intensity.test.ts`.
 
+## Errors
+
+The plugin can throw the following errors:
+
+- `APIRequestError`: this is caused by a problem retrieving data from the API. The error message returned from the API is echoed in the IF error message.
+
 
 ## Citations
 
