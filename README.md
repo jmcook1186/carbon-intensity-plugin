@@ -9,7 +9,7 @@ The carbon intensity plugin grabs grid carbon intensity data from the UK Nationa
 
 The `timestamp` field in the input data is used as a query parameter to the `intensity` endpoint documented [here](https://carbon-intensity.github.io/api-definitions/#get-intensity-factors).
 
-Currently, an API request is made for every timestep in the input array. However, since the API has a maximum temporal resolution of 30 minutes, a future upgrade will add some logic to only make a new API request if 30 minutes have elapsed since the previous request.
+The API has a maximum temporal resolution of 30 minutes, therefore we only make a new API request if 30 minutes have elapsed since the previous request.
 
 ## Environment
 
